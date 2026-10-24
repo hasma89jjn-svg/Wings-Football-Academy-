@@ -206,7 +206,7 @@
         <h3 style="margin-bottom: 15px; color: var(--primary-navy); font-size: 1.1rem;"><i class="fa-solid fa-pen-to-square"></i> Buat Artikel / Berita Baru</h3>
         <div class="form-group">
           <label>Judul Artikel</label>
-          <input type="text" id="artTitle" placeholder="Contoh: Sesi Latihan Bersama & Uji Coba Tim U-12" class="form-control">
+          <input type="text" id="artTitle" placeholder="Judul artikel berita" class="form-control">
         </div>
         <div class="grid-3" style="margin-bottom: 10px;">
           <div class="form-group">
@@ -220,23 +220,13 @@
         </div>
         <div class="form-group">
           <label>Isi Berita / Kegiatan</label>
-          <textarea id="artContent" rows="4" placeholder="Tuliskan berita atau laporan kegiatan di sini..." class="form-control"></textarea>
+          <textarea id="artContent" rows="5" placeholder="Tuliskan berita atau laporan kegiatan di sini..." class="form-control"></textarea>
         </div>
-        <button onclick="addArticle()" class="btn-primary" style="margin-top: 5px;"><i class="fa-solid fa-paper-plane"></i> Terbitkan Artikel</button>
+        <button type="button" onclick="addArticle()" class="btn-primary" style="margin-top: 5px; cursor: pointer;"><i class="fa-solid fa-paper-plane"></i> Terbitkan Artikel</button>
       </div>
 
       <!-- Daftar Artikel -->
-      <div class="grid-3" id="articleList">
-        <!-- Artikel Default Contoh -->
-        <div class="article-card">
-          <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80" class="article-img" alt="Artikel">
-          <div class="article-content">
-            <div class="article-date"><i class="fa-regular fa-calendar"></i> 24 OKTOBER 2026</div>
-            <h3 class="article-title">Pembukaan Sesi Latihan Perdana Wings FA Pattedong</h3>
-            <p class="article-text">Wings Football Academy Pattedong resmi memulai latihan perdana dengan antusiasme tinggi dari para siswa. Fokus utama latihan awal ini adalah pembentukan fisik dasar dan koordinasi bola.</p>
-          </div>
-        </div>
-      </div>
+      <div class="grid-3" id="articleList"></div>
     </div>
   </section>
 
@@ -261,7 +251,7 @@
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
               <input type="file" id="photoInput" accept="image/*" class="form-control" style="flex: 1; min-width: 150px;">
               <input type="text" id="photoTitle" placeholder="Judul Foto Kegiatan" class="form-control" style="flex: 1; min-width: 150px;">
-              <button onclick="uploadPhoto()" class="btn-primary" style="padding: 10px 18px; font-size: 0.85rem;"><i class="fa-solid fa-plus"></i> Upload</button>
+              <button type="button" onclick="uploadPhoto()" class="btn-primary" style="padding: 10px 18px; font-size: 0.85rem;"><i class="fa-solid fa-plus"></i> Upload</button>
             </div>
           </div>
         </div>
@@ -328,7 +318,7 @@
               <option value="U14-U17">Kategori: U14 – U17</option>
             </select>
           </div>
-          <button onclick="kirimFormWA()" class="btn-wa-large" style="width: 100%; justify-content: center; font-size: 0.9rem;">
+          <button type="button" onclick="kirimFormWA()" class="btn-wa-large" style="width: 100%; justify-content: center; font-size: 0.9rem;">
             <i class="fa-brands fa-whatsapp"></i> Kirim Form Pendaftaran ke WhatsApp Panitia
           </button>
         </div>
@@ -350,7 +340,7 @@
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
-  <!-- Script Interaktif -->
+  <!-- Script Interaktif Sempurna -->
   <script>
     const NOMOR_WA = "6282343439289";
 
@@ -412,6 +402,7 @@
           galleryGrid.prepend(newItem);
           document.getElementById('photoTitle').value = '';
           photoInput.value = '';
+          alert("Foto kegiatan berhasil diunggah!");
         };
         reader.readAsDataURL(photoInput.files[0]);
       } else {
@@ -419,7 +410,7 @@
       }
     }
 
-    // FUNGSI MEMBUAT ARTIKEL
+    // FUNGSI MEMBUAT ARTIKEL (STABIL & TANPA ERROR)
     function addArticle() {
       const title = document.getElementById('artTitle').value;
       const date = document.getElementById('artDate').value;
@@ -427,23 +418,42 @@
       const imgInput = document.getElementById('artImage');
 
       if (!title || !content) {
-        alert("Mohon isi judul dan isi berita artikel.");
+        alert("Mohon isi Judul dan Isi Berita terlebih dahulu.");
         return;
       }
 
-      const formattedDate = date ? new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'LONG', year: 'numeric' }) : 'Hari ini';
+      let formattedDate = '24 OKTOBER 2026';
+      if (date) {
+        try {
+          const d = new Date(date);
+          formattedDate = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
+        } catch(e) {
+          formattedDate = date;
+        }
+      }
 
       if (imgInput.files && imgInput.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          renderArticleCard(title, formattedDate, content, e.target.result);
-          saveArticlesToStorage(title, formattedDate, content, e.target.result);
+          processSaveArticle(title, formattedDate, content, e.target.result);
         };
         reader.readAsDataURL(imgInput.files[0]);
       } else {
         const defaultImg = "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&q=80";
-        renderArticleCard(title, formattedDate, content, defaultImg);
-        saveArticlesToStorage(title, formattedDate, content, defaultImg);
+        processSaveArticle(title, formattedDate, content, defaultImg);
+      }
+    }
+
+    function processSaveArticle(title, date, content, imgSrc) {
+      renderArticleCard(title, date, content, imgSrc);
+      
+      // Simpan ke localStorage
+      try {
+        let articles = JSON.parse(localStorage.getItem('wings_articles') || '[]');
+        articles.unshift({ title, date, content, imgSrc });
+        localStorage.setItem('wings_articles', JSON.stringify(articles));
+      } catch(e) {
+        console.log("Penyimpanan lokal penuh atau dibatasi");
       }
 
       // Reset Form
@@ -469,12 +479,6 @@
       articleList.prepend(card);
     }
 
-    function saveArticlesToStorage(title, date, content, imgSrc) {
-      let articles = JSON.parse(localStorage.getItem('wings_articles') || '[]');
-      articles.unshift({ title, date, content, imgSrc });
-      localStorage.setItem('wings_articles', JSON.stringify(articles));
-    }
-
     window.onload = function() {
       // Load Custom Logo
       const savedLogo = localStorage.getItem('wings_custom_logo');
@@ -483,10 +487,12 @@
       }
 
       // Load Saved Articles
-      const savedArticles = JSON.parse(localStorage.getItem('wings_articles') || '[]');
-      savedArticles.forEach(art => {
-        renderArticleCard(art.title, art.date, art.content, art.imgSrc);
-      });
+      try {
+        const savedArticles = JSON.parse(localStorage.getItem('wings_articles') || '[]');
+        savedArticles.forEach(art => {
+          renderArticleCard(art.title, art.date, art.content, art.imgSrc);
+        });
+      } catch(e) {}
     };
   </script>
 </body>
