@@ -199,7 +199,7 @@
     </div>
   </section>
 
-  <!-- SEKSI ARTIKEL KEGIATAN PERMANEN -->
+  <!-- SEKSI ARTIKEL KEGIATAN -->
   <section id="artikel" style="background: #F1F5F9;">
     <div class="container">
       <div class="section-title">
@@ -207,10 +207,35 @@
         <p>Informasi terbaru seputar kegiatan, latihan, dan perkembangan Wings FA Pattedong</p>
       </div>
 
-      <!-- Daftar Artikel Permanen -->
+      <!-- Form Buat Artikel Tambahan -->
+      <div class="admin-panel">
+        <h3 style="margin-bottom: 15px; color: var(--primary-navy); font-size: 1.1rem;"><i class="fa-solid fa-pen-to-square"></i> Buat Artikel / Berita Baru</h3>
+        <div class="form-group">
+          <label>Judul Artikel</label>
+          <input type="text" id="artTitle" placeholder="Judul artikel berita" class="form-control">
+        </div>
+        <div class="grid-3" style="margin-bottom: 10px;">
+          <div class="form-group">
+            <label>Tanggal Kegiatan</label>
+            <input type="date" id="artDate" class="form-control">
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Foto Sampul Artikel (Opsional)</label>
+            <input type="file" id="artImage" accept="image/*" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Isi Berita / Kegiatan</label>
+          <textarea id="artContent" rows="5" placeholder="Tuliskan berita atau laporan kegiatan di sini..." class="form-control"></textarea>
+        </div>
+        <button type="button" onclick="addArticle()" class="btn-primary" style="margin-top: 5px; cursor: pointer;"><i class="fa-solid fa-paper-plane"></i> Terbitkan Artikel</button>
+      </div>
+
+      <!-- Daftar Artikel (Otomatis memuat berita utama + artikel buatan Anda) -->
       <div class="grid-3" id="articleList">
+        <!-- BERITA UTAMA TURNAMEN REDO SOCCER SCHOOL -->
         <div class="article-card">
-          <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80" class="article-img" alt="Turnamen Redo Soccer School">
+          <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&q=80" class="article-img" alt="Turnamen Redo Soccer School">
           <div class="article-content">
             <div class="article-date"><i class="fa-regular fa-calendar"></i> 24 OKTOBER 2026</div>
             <h3 class="article-title">Perjuangan WFA di Turnamen Redo Soccer School: Tim U-10 Tembus 8 Besar!</h3>
@@ -231,7 +256,7 @@ Hari ini, Sabtu 24 Oktober 2026 pukul 10.30 WITA, tim U-10 WFA kembali bertandin
     </div>
   </section>
 
-  <!-- GALERI FOTO KEGIATAN PERMANEN -->
+  <!-- GALERI FOTO KEGIATAN -->
   <section id="galeri">
     <div class="container">
       <div class="section-title">
@@ -239,7 +264,26 @@ Hari ini, Sabtu 24 Oktober 2026 pukul 10.30 WITA, tim U-10 WFA kembali bertandin
         <p>Dokumentasi latihan, pertandingan, dan semangat generasi muda Pattedong Selatan</p>
       </div>
 
-      <!-- Grid Galeri Permanen -->
+      <!-- Panel Upload Foto & Logo -->
+      <div class="admin-panel">
+        <h3 style="margin-bottom: 15px; color: var(--primary-navy); font-size: 1.1rem;"><i class="fa-solid fa-gear"></i> Panel Unggah Foto & Logo</h3>
+        <div class="grid-3">
+          <div class="form-group">
+            <label><i class="fa-solid fa-image"></i> Ganti Simbol / Logo</label>
+            <input type="file" id="logoInput" accept="image/*" class="form-control" onchange="uploadLogo(event)">
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label><i class="fa-solid fa-upload"></i> Tambah Foto Kegiatan Baru</label>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <input type="file" id="photoInput" accept="image/*" class="form-control" style="flex: 1; min-width: 150px;">
+              <input type="text" id="photoTitle" placeholder="Judul Foto Kegiatan" class="form-control" style="flex: 1; min-width: 150px;">
+              <button type="button" onclick="uploadPhoto()" class="btn-primary" style="padding: 10px 18px; font-size: 0.85rem;"><i class="fa-solid fa-plus"></i> Upload</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid Galeri -->
       <div class="gallery-grid" id="galleryGrid">
         <div class="gallery-item">
           <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80" alt="Latihan Tim U10">
@@ -329,7 +373,7 @@ Hari ini, Sabtu 24 Oktober 2026 pukul 10.30 WITA, tim U-10 WFA kembali bertandin
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
-  <!-- Script Sempurna -->
+  <!-- Script Interaktif Sempurna -->
   <script>
     const NOMOR_WA = "6282343439289";
     const SITE_URL = "https://hasma89jjn-svg.github.io/Wings-Football-Academy-/";
@@ -354,15 +398,176 @@ Hari ini, Sabtu 24 Oktober 2026 pukul 10.30 WITA, tim U-10 WFA kembali bertandin
                   `*Nama Siswa:* ${nama}\n` +
                   `*TTL:* ${ttl || '-'}\n` +
                   `*Kategori:* ${kategori}\n\n` +
-                  `Saya ingin mendaftar ke Wings Football Academy Pattedong. Mohon petunjuk selanjutnya.`;
+                  `Izin mendaftar ke Wings Football Academy Pattedong. Mohon petunjuk selanjutnya.`;
 
       openWhatsApp(pesan);
+    }
+
+    // Fungsi Ganti Logo & Simpan di Browser
+    function uploadLogo(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const imgUrl = e.target.result;
+          document.getElementById('headerLogoBox').innerHTML = `<img src="${imgUrl}" alt="Logo Wings FA">`;
+          localStorage.setItem('wings_custom_logo', imgUrl);
+          alert("Logo berhasil diperbarui di perangkat ini!");
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Fungsi Tambah Foto Galeri Baru
+    function uploadPhoto() {
+      const photoInput = document.getElementById('photoInput');
+      const photoTitle = document.getElementById('photoTitle').value || 'Kegiatan WFA';
+
+      if (photoInput.files && photoInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const galleryGrid = document.getElementById('galleryGrid');
+          const newItem = document.createElement('div');
+          newItem.className = 'gallery-item';
+          newItem.innerHTML = `
+            <img src="${e.target.result}" alt="${photoTitle}">
+            <div class="gallery-overlay">
+              <h4>${photoTitle}</h4>
+              <p>Dokumentasi WFA Pattedong</p>
+            </div>
+          `;
+          galleryGrid.prepend(newItem);
+          
+          // Simpan ke localStorage
+          let photos = JSON.parse(localStorage.getItem('wings_photos') || '[]');
+          photos.unshift({ title: photoTitle, imgSrc: e.target.result });
+          localStorage.setItem('wings_photos', JSON.stringify(photos));
+
+          document.getElementById('photoTitle').value = '';
+          photoInput.value = '';
+          alert("Foto kegiatan berhasil diunggah!");
+        };
+        reader.readAsDataURL(photoInput.files[0]);
+      } else {
+        alert("Silakan pilih foto terlebih dahulu.");
+      }
+    }
+
+    // Fungsi Terbitkan Artikel Baru
+    function addArticle() {
+      const title = document.getElementById('artTitle').value;
+      const date = document.getElementById('artDate').value;
+      const content = document.getElementById('artContent').value;
+      const imgInput = document.getElementById('artImage');
+
+      if (!title || !content) {
+        alert("Mohon isi Judul dan Isi Berita terlebih dahulu.");
+        return;
+      }
+
+      let formattedDate = 'HARI INI';
+      if (date) {
+        try {
+          const d = new Date(date);
+          formattedDate = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
+        } catch(e) {
+          formattedDate = date;
+        }
+      }
+
+      if (imgInput.files && imgInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          processSaveArticle(title, formattedDate, content, e.target.result);
+        };
+        reader.readAsDataURL(imgInput.files[0]);
+      } else {
+        const defaultImg = "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&q=80";
+        processSaveArticle(title, formattedDate, content, defaultImg);
+      }
+    }
+
+    function processSaveArticle(title, date, content, imgSrc) {
+      renderArticleCard(title, date, content, imgSrc);
+      
+      try {
+        let articles = JSON.parse(localStorage.getItem('wings_articles') || '[]');
+        articles.unshift({ title, date, content, imgSrc });
+        localStorage.setItem('wings_articles', JSON.stringify(articles));
+      } catch(e) {}
+
+      document.getElementById('artTitle').value = '';
+      document.getElementById('artDate').value = '';
+      document.getElementById('artContent').value = '';
+      document.getElementById('artImage').value = '';
+      alert("Artikel berhasil diterbitkan!");
+    }
+
+    function renderArticleCard(title, date, content, imgSrc) {
+      const articleList = document.getElementById('articleList');
+      const card = document.createElement('div');
+      card.className = 'article-card';
+
+      const shareText = encodeURIComponent(`*${title}*\n\nBaca selengkapnya berita WFA Pattedong di:\n${SITE_URL}`);
+      const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}`;
+      const waUrl = `https://api.whatsapp.com/send?text=${shareText}`;
+
+      card.innerHTML = `
+        <img src="${imgSrc}" class="article-img" alt="${title}">
+        <div class="article-content">
+          <div class="article-date"><i class="fa-regular fa-calendar"></i> ${date}</div>
+          <h3 class="article-title">${title}</h3>
+          <p class="article-text">${content}</p>
+          <div class="share-box">
+            <span class="share-label">Bagikan:</span>
+            <a href="${waUrl}" target="_blank" class="btn-share-wa"><i class="fa-brands fa-whatsapp"></i> WA</a>
+            <a href="${fbUrl}" target="_blank" class="btn-share-fb"><i class="fa-brands fa-facebook-f"></i> FB</a>
+            <button onclick="copyArticleLink()" class="btn-share-copy"><i class="fa-solid fa-link"></i> Salin Link</button>
+          </div>
+        </div>
+      `;
+      articleList.prepend(card);
     }
 
     function copyArticleLink() {
       navigator.clipboard.writeText(SITE_URL);
       alert("Tautan website berhasil disalin!");
     }
+
+    // Memuat ulang logo, artikel tersimpan, dan galeri saat halaman dibuka
+    window.onload = function() {
+      // 1. Load Logo
+      const savedLogo = localStorage.getItem('wings_custom_logo');
+      if (savedLogo) {
+        document.getElementById('headerLogoBox').innerHTML = `<img src="${savedLogo}" alt="Logo Wings FA">`;
+      }
+
+      // 2. Load Artikel Tambahan
+      try {
+        const savedArticles = JSON.parse(localStorage.getItem('wings_articles') || '[]');
+        savedArticles.forEach(art => {
+          renderArticleCard(art.title, art.date, art.content, art.imgSrc);
+        });
+      } catch(e) {}
+
+      // 3. Load Galeri Foto Tambahan
+      try {
+        const savedPhotos = JSON.parse(localStorage.getItem('wings_photos') || '[]');
+        const galleryGrid = document.getElementById('galleryGrid');
+        savedPhotos.forEach(photo => {
+          const newItem = document.createElement('div');
+          newItem.className = 'gallery-item';
+          newItem.innerHTML = `
+            <img src="${photo.imgSrc}" alt="${photo.title}">
+            <div class="gallery-overlay">
+              <h4>${photo.title}</h4>
+              <p>Dokumentasi WFA Pattedong</p>
+            </div>
+          `;
+          galleryGrid.prepend(newItem);
+        });
+      } catch(e) {}
+    };
   </script>
 </body>
 </html>
