@@ -102,11 +102,11 @@
 
     /* Style Artikel & Tombol Share */
     .article-card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); display: flex; flex-direction: column; }
-    .article-img { height: 180px; width: 100%; object-fit: cover; background: #E2E8F0; }
+    .article-img { height: 200px; width: 100%; object-fit: cover; background: #E2E8F0; }
     .article-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
     .article-date { font-size: 0.75rem; color: var(--accent-gold); font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
-    .article-title { font-size: 1.1rem; color: var(--primary-navy); font-weight: 800; margin-bottom: 10px; line-height: 1.3; }
-    .article-text { font-size: 0.88rem; color: var(--text-muted); flex: 1; white-space: pre-line; margin-bottom: 15px; }
+    .article-title { font-size: 1.15rem; color: var(--primary-navy); font-weight: 800; margin-bottom: 12px; line-height: 1.3; }
+    .article-text { font-size: 0.88rem; color: var(--text-muted); flex: 1; white-space: pre-line; margin-bottom: 15px; text-align: justify; }
     
     .share-box { border-top: 1px solid var(--border-color); padding-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
     .share-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
@@ -208,7 +208,7 @@
         <p>Informasi terbaru seputar kegiatan, latihan, dan perkembangan Wings FA Pattedong</p>
       </div>
 
-      <!-- Form Buat Artikel -->
+      <!-- Form Buat Artikel Tambahan -->
       <div class="admin-panel">
         <h3 style="margin-bottom: 15px; color: var(--primary-navy); font-size: 1.1rem;"><i class="fa-solid fa-pen-to-square"></i> Buat Artikel / Berita Baru</h3>
         <div class="form-group">
@@ -233,7 +233,29 @@
       </div>
 
       <!-- Daftar Artikel -->
-      <div class="grid-3" id="articleList"></div>
+      <div class="grid-3" id="articleList">
+
+        <!-- ARTIKEL PERMANEN: PERJUANGAN WFA REDO SOCCER SCHOOL -->
+        <div class="article-card">
+          <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&q=80" class="article-img" alt="Turnamen Redo Soccer School">
+          <div class="article-content">
+            <div class="article-date"><i class="fa-regular fa-calendar"></i> 24 OKTOBER 2026</div>
+            <h3 class="article-title">Perjuangan WFA di Turnamen Redo Soccer School: Tim U-10 Tembus 8 Besar!</h3>
+            <p class="article-text">Wings Football Academy (WFA) Pattedong Selatan kembali menunjukkan taji di kancah sepak bola usia dini. Tiga kelompok usia WFA (U-10, U-11, dan U-12) diturunkan dalam ajang Turnamen Redo Soccer School sejak Kamis, 22 Oktober 2026.
+
+Di tengah persaingan ketat, tim WFA U-10 tampil memukau dan berhasil mengamankan tiket menuju Babak 8 Besar setelah menumbangkan tim tangguh U-10 Sidrap dengan skor tipis 2-1!
+
+Hari ini, Sabtu 24 Oktober 2026 pukul 10.30 WITA, tim U-10 WFA kembali bertanding melawan U-10 BMS Sampano. Manager sekaligus Coach Suparmin Sabrah memohon doa dari seluruh masyarakat Pattedong Selatan agar tim U-10 dapat memetik kemenangan dan lolos ke babak perempat final!</p>
+            <div class="share-box">
+              <span class="share-label">Bagikan:</span>
+              <a href="https://api.whatsapp.com/send?text=*Perjuangan%20WFA%20di%20Turnamen%20Redo%20Soccer%20School*%0A%0ABaca%20selengkapnya%20di:%20https://hasma89jjn-svg.github.io/Wings-Football-Academy-/" target="_blank" class="btn-share-wa"><i class="fa-brands fa-whatsapp"></i> WA</a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=https://hasma89jjn-svg.github.io/Wings-Football-Academy-/" target="_blank" class="btn-share-fb"><i class="fa-brands fa-facebook-f"></i> FB</a>
+              <button onclick="copyArticleLink()" class="btn-share-copy"><i class="fa-solid fa-link"></i> Salin Link</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -350,7 +372,7 @@
   <!-- Script Interaktif Sempurna -->
   <script>
     const NOMOR_WA = "6282343439289";
-    const SITE_URL = window.location.href;
+    const SITE_URL = "https://hasma89jjn-svg.github.io/Wings-Football-Academy-/";
 
     function openWhatsApp(customText) {
       let text = customText || "Halo Panitia Wings Football Academy, saya ingin bertanya informasi pendaftaran.";
@@ -418,7 +440,7 @@
       }
     }
 
-    // FUNGSI MEMBUAT ARTIKEL & FITUR SHARE
+    // ARTIKEL DITAMBAHKAN
     function addArticle() {
       const title = document.getElementById('artTitle').value;
       const date = document.getElementById('artDate').value;
@@ -465,7 +487,7 @@
       document.getElementById('artDate').value = '';
       document.getElementById('artContent').value = '';
       document.getElementById('artImage').value = '';
-      alert("Artikel berhasil diterbitkan!");
+      alert("Artikel berhasil diterbitkan di perangkat ini!");
     }
 
     function renderArticleCard(title, date, content, imgSrc) {
@@ -473,7 +495,7 @@
       const card = document.createElement('div');
       card.className = 'article-card';
 
-      const shareText = encodeURIComponent(`*${title}*\n\nBaca selengkapnya berita WFA Pattedong di:\n${SITE_URL}`);
+      const shareText = encodeURIComponent(`*${title}*\n\nBaca selengkapnya di:\n${SITE_URL}`);
       const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}`;
       const waUrl = `https://api.whatsapp.com/send?text=${shareText}`;
 
@@ -495,8 +517,8 @@
     }
 
     function copyArticleLink() {
-      navigator.clipboard.writeText(window.location.href);
-      alert("Tautan artikel berhasil disalin! Anda bisa langsung menempelkannya (paste) di Facebook, WA, atau grup sosial media.");
+      navigator.clipboard.writeText(SITE_URL);
+      alert("Tautan website berhasil disalin! Anda bisa langsung menempelkannya (paste) di WhatsApp atau sosial media.");
     }
 
     window.onload = function() {
