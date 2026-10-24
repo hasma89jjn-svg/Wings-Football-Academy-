@@ -22,7 +22,6 @@
       --text-muted: #64748B;
       --border-color: #E2E8F0;
       --whatsapp-green: #25D366;
-      --whatsapp-dark: #128C7E;
       --radius-lg: 16px;
       --radius-md: 10px;
       --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -36,12 +35,8 @@
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
     header {
-      background-color: var(--primary-navy);
-      color: var(--white);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      background-color: var(--primary-navy); color: var(--white);
+      position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
     .nav-wrapper { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
     .brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--white); }
@@ -90,8 +85,6 @@
     .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
     .program-card { background: var(--white); border-radius: var(--radius-lg); padding: 25px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); }
     .program-badge { background: var(--primary-navy); color: var(--accent-gold); padding: 5px 12px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; display: inline-block; margin-bottom: 15px; }
-    .program-card h3 { font-size: 1.25rem; margin-bottom: 10px; color: var(--primary-navy); }
-    .program-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
 
     .admin-panel { background: var(--white); border-radius: var(--radius-lg); padding: 25px; box-shadow: var(--shadow-md); margin-bottom: 40px; border: 2px dashed var(--accent-gold); }
     .form-group { margin-bottom: 15px; }
@@ -105,8 +98,14 @@
       position: absolute; inset: 0; background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
       display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; color: white;
     }
-    .gallery-overlay h4 { font-size: 1rem; margin-bottom: 2px; }
-    .gallery-overlay p { font-size: 0.8rem; color: #94A3B8; }
+
+    /* Style Artikel */
+    .article-card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); display: flex; flex-direction: column; }
+    .article-img { height: 180px; width: 100%; object-fit: cover; background: #E2E8F0; }
+    .article-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .article-date { font-size: 0.75rem; color: var(--accent-gold); font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
+    .article-title { font-size: 1.1rem; color: var(--primary-navy); font-weight: 800; margin-bottom: 10px; line-height: 1.3; }
+    .article-text { font-size: 0.88rem; color: var(--text-muted); flex: 1; white-space: pre-line; }
 
     .registration-card {
       background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-navy) 100%);
@@ -122,10 +121,7 @@
 
     footer { background: var(--primary-navy); color: #94A3B8; padding: 30px 0; text-align: center; font-size: 0.85rem; }
 
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 1.8rem; }
-      nav ul { display: none; }
-    }
+    @media (max-width: 768px) { nav ul { display: none; } }
   </style>
 </head>
 <body>
@@ -145,13 +141,10 @@
       <nav>
         <ul>
           <li><a href="#program">Program</a></li>
+          <li><a href="#artikel">Artikel Kegiatan</a></li>
           <li><a href="#galeri">Galeri Foto</a></li>
           <li><a href="#pendaftaran">Pendaftaran</a></li>
-          <li>
-            <button onclick="openWhatsApp()" class="btn-nav-wa">
-              <i class="fa-brands fa-whatsapp"></i> Hubungi WA
-            </button>
-          </li>
+          <li><a href="#" onclick="openWhatsApp()" class="btn-nav-wa"><i class="fa-brands fa-whatsapp"></i> Hubungi WA</a></li>
         </ul>
       </nav>
     </div>
@@ -200,15 +193,62 @@
     </div>
   </section>
 
+  <!-- SEKSI ARTIKEL KEGIATAN -->
+  <section id="artikel" style="background: #F1F5F9;">
+    <div class="container">
+      <div class="section-title">
+        <h2>Berita & Artikel Kegiatan</h2>
+        <p>Informasi terbaru seputar kegiatan, latihan, dan perkembangan Wings FA Pattedong</p>
+      </div>
+
+      <!-- Form Buat Artikel -->
+      <div class="admin-panel">
+        <h3 style="margin-bottom: 15px; color: var(--primary-navy); font-size: 1.1rem;"><i class="fa-solid fa-pen-to-square"></i> Buat Artikel / Berita Baru</h3>
+        <div class="form-group">
+          <label>Judul Artikel</label>
+          <input type="text" id="artTitle" placeholder="Contoh: Sesi Latihan Bersama & Uji Coba Tim U-12" class="form-control">
+        </div>
+        <div class="grid-3" style="margin-bottom: 10px;">
+          <div class="form-group">
+            <label>Tanggal Kegiatan</label>
+            <input type="date" id="artDate" class="form-control">
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Foto Sampul Artikel (Opsional)</label>
+            <input type="file" id="artImage" accept="image/*" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Isi Berita / Kegiatan</label>
+          <textarea id="artContent" rows="4" placeholder="Tuliskan berita atau laporan kegiatan di sini..." class="form-control"></textarea>
+        </div>
+        <button onclick="addArticle()" class="btn-primary" style="margin-top: 5px;"><i class="fa-solid fa-paper-plane"></i> Terbitkan Artikel</button>
+      </div>
+
+      <!-- Daftar Artikel -->
+      <div class="grid-3" id="articleList">
+        <!-- Artikel Default Contoh -->
+        <div class="article-card">
+          <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80" class="article-img" alt="Artikel">
+          <div class="article-content">
+            <div class="article-date"><i class="fa-regular fa-calendar"></i> 24 OKTOBER 2026</div>
+            <h3 class="article-title">Pembukaan Sesi Latihan Perdana Wings FA Pattedong</h3>
+            <p class="article-text">Wings Football Academy Pattedong resmi memulai latihan perdana dengan antusiasme tinggi dari para siswa. Fokus utama latihan awal ini adalah pembentukan fisik dasar dan koordinasi bola.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Galeri & Fitur Upload Foto & Logo -->
-  <section id="galeri" style="background: #F1F5F9;">
+  <section id="galeri">
     <div class="container">
       <div class="section-title">
         <h2>Galeri Kegiatan & Simbol Wings FA</h2>
         <p>Upload foto kegiatan latihan serta ganti logo sekolah bola langsung dari sini</p>
       </div>
 
-      <!-- Panel Upload -->
+      <!-- Panel Upload Foto & Logo -->
       <div class="admin-panel">
         <h3 style="margin-bottom: 15px; color: var(--primary-navy); font-size: 1.1rem;"><i class="fa-solid fa-gear"></i> Panel Unggah Foto & Logo</h3>
         <div class="grid-3">
@@ -248,7 +288,7 @@
   </section>
 
   <!-- Pendaftaran -->
-  <section id="pendaftaran">
+  <section id="pendaftaran" style="background: #F1F5F9;">
     <div class="container">
       <div class="registration-card">
         <div style="text-align: center; margin-bottom: 25px;">
@@ -379,11 +419,74 @@
       }
     }
 
+    // FUNGSI MEMBUAT ARTIKEL
+    function addArticle() {
+      const title = document.getElementById('artTitle').value;
+      const date = document.getElementById('artDate').value;
+      const content = document.getElementById('artContent').value;
+      const imgInput = document.getElementById('artImage');
+
+      if (!title || !content) {
+        alert("Mohon isi judul dan isi berita artikel.");
+        return;
+      }
+
+      const formattedDate = date ? new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'LONG', year: 'numeric' }) : 'Hari ini';
+
+      if (imgInput.files && imgInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          renderArticleCard(title, formattedDate, content, e.target.result);
+          saveArticlesToStorage(title, formattedDate, content, e.target.result);
+        };
+        reader.readAsDataURL(imgInput.files[0]);
+      } else {
+        const defaultImg = "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&q=80";
+        renderArticleCard(title, formattedDate, content, defaultImg);
+        saveArticlesToStorage(title, formattedDate, content, defaultImg);
+      }
+
+      // Reset Form
+      document.getElementById('artTitle').value = '';
+      document.getElementById('artDate').value = '';
+      document.getElementById('artContent').value = '';
+      document.getElementById('artImage').value = '';
+      alert("Artikel berhasil diterbitkan!");
+    }
+
+    function renderArticleCard(title, date, content, imgSrc) {
+      const articleList = document.getElementById('articleList');
+      const card = document.createElement('div');
+      card.className = 'article-card';
+      card.innerHTML = `
+        <img src="${imgSrc}" class="article-img" alt="${title}">
+        <div class="article-content">
+          <div class="article-date"><i class="fa-regular fa-calendar"></i> ${date}</div>
+          <h3 class="article-title">${title}</h3>
+          <p class="article-text">${content}</p>
+        </div>
+      `;
+      articleList.prepend(card);
+    }
+
+    function saveArticlesToStorage(title, date, content, imgSrc) {
+      let articles = JSON.parse(localStorage.getItem('wings_articles') || '[]');
+      articles.unshift({ title, date, content, imgSrc });
+      localStorage.setItem('wings_articles', JSON.stringify(articles));
+    }
+
     window.onload = function() {
+      // Load Custom Logo
       const savedLogo = localStorage.getItem('wings_custom_logo');
       if (savedLogo) {
         document.getElementById('headerLogoBox').innerHTML = `<img src="${savedLogo}" alt="Logo Wings FA">`;
       }
+
+      // Load Saved Articles
+      const savedArticles = JSON.parse(localStorage.getItem('wings_articles') || '[]');
+      savedArticles.forEach(art => {
+        renderArticleCard(art.title, art.date, art.content, art.imgSrc);
+      });
     };
   </script>
 </body>
